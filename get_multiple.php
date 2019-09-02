@@ -1,5 +1,8 @@
 <?php
-
+ini_set('display_errors', 'on');
+ini_set('error_reporting', E_ALL);
+define('WP_DEBUG', false);
+define('WP_DEBUG_DISPLAY', false);
 global $post, $woocommerce, $the_order;
 if (!extension_loaded('curl')) {
     trigger_error('cURL extension not installed', E_USER_ERROR);
@@ -109,18 +112,22 @@ function XMLtoARRAY($rawxml)
  **/
 
 
-#include ('dhrufusionapi.class.php');
+require ('header.php');
+include ('dhrufusionapi.class.php');
 define("REQUESTFORMAT", "JSON"); // we recommend json format (More information http://php.net/manual/en/book.json.php)
-define('DHRUFUSION_URL', "https://www.unlockking.us/");
-define("USERNAME", "muhitmonsur");
-define("API_ACCESS_KEY", "N9-JXT-6NQ-IJ2-5KC-N9C-MBU-12Y");
-$status = '';
+define('DHRUFUSION_URL', "http://yoursite.com/");
+define("USERNAME", "XXXXXXXX");
+define("API_ACCESS_KEY", "XXX-XXX-XXX-XXX-XXX-XXX-XXX-XXX");
+#$status ='';
+
 date_default_timezone_set('US/Eastern');
 $currenttime = date('h:i:s:u');
-$servername = "how2zzcom.ipagemysql.com";
-$username = "SDyVRGrgqr72kR0";
-$password = "moURoyaMfXbvd4oi";
-$dbname = "ss_dbname_72n51cab1h";
+$servername = "";
+$username = "";
+$password = "";
+$dbname = "";
+
+
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -129,11 +136,16 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM wp_vhut_api_unlockking_response WHERE api_status='0'";
+$sql = "SELECT * FROM wp_vhut_api_unlockking_response WHERE api_status=1 and multiple_status =1";
 echo "sql: " . $sql . "</br>";
 $result = $conn->query($sql);
 if ($result->num_rows > 1) {
-    //echo "heloo";
+		$content='';
+
+		$status='';
+		$order_id='';
+		$note='';
+		$update_status='';
     // output data of each row
     while ($row = $result->fetch_assoc()) {
         $api = new DhruFusion();
@@ -187,41 +199,48 @@ if ($result->num_rows > 1) {
                 $apistatus = 0;
                 $metavalue = 'processing';
             }
+			
             $sql = "UPDATE wp_vhut_api_unlockking_response SET description ='$description',status='$status',api_status='$apistatus' where reference_id='$reference_id'";
+						
             //echo "sql: ".$sql."</br>";
             if ($conn->query($sql) === TRUE) {
-                echo 'ooooooooo';
-
-                if ($status == 4) {
-                    //echo 'yyyyyyy';
-                    $orders = new WC_Order($order_id);
-                    echo "orders: " . $orders . "</br>";
-                    // The text for the note
-                    //$note = __($description);
-                    $orders->set_customer_note($description);
-                    $orders->save();
-                    if (!empty($orders)) {
-                        $orders->update_status($update_status);
-                        meta_key_update($order_id, $conn, $description, $metavalue);
-                    }
-                    echo "Record updated successfully";
-                }
+               echo "Record updated successfully API";                
 
             } else {
                 echo "Error updating record: " . $conn->error;
             }
+			 $note .= $description;
         }
 
         $para['ID'] = null;
         $api = null;
     }
+	
+	 /* echo "count lode: " . $counter . "</br>";
+		echo "else_order_id:" . $rows['order_id'] . "</br>";
+		 echo $description ."</br>";
+		 echo $status ."</br>";
+		 echo $update_status ."</br>"; */
+		 $orders = new WC_Order($order_id);
+                    echo "orders: " . $orders . "</br>";
+                    // The text for the note
+                    //$note = __($description);
+                    $orders->set_customer_note( $note );
+                    $orders->save();
+                    if (!empty($orders)) {
+                        $orders->update_status($update_status);
+                        meta_key_update($order_id, $conn, $note, $metavalue);
+                    }
+		 
+
 } else {
     echo "0 results";
 }
 $result->free();
 $conn->close();
 
-function meta_key_update($order_id, $conn, $description, $metavalue)
+
+function meta_key_update($order_id, $conn, $note, $metavalue)
 {
     echo "okay";
     $update = "SELECT * FROM  wp_vhut_postmeta WHERE  post_id =$order_id";
@@ -246,7 +265,7 @@ function meta_key_update($order_id, $conn, $description, $metavalue)
     }
     //echo "</br></br>";
     $resultup->free();
-    $sqlopt = "update wp_vhut_EWD_OTP_Orders set Order_Notes_Public='$description' where WooCommerce_ID='$order_id'";
+    $sqlopt = "update wp_vhut_EWD_OTP_Orders set Order_Notes_Public='$note' where WooCommerce_ID='$order_id'";
     echo "sqlopt: " . $sqlopt . "</br>";
     if ($conn->query($sqlopt) === TRUE) {
         echo "opt update";

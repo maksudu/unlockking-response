@@ -102,15 +102,15 @@ function XMLtoARRAY($rawxml)
 
 #include ('dhrufusionapi.class.php');
 define("REQUESTFORMAT", "JSON"); // we recommend json format (More information http://php.net/manual/en/book.json.php)
-define('DHRUFUSION_URL', "https://www.unlockking.us/");
-define("USERNAME", "muhitmonsur");
-define("API_ACCESS_KEY", "N9-JXT-6NQ-IJ2-5KC-N9C-MBU-12Y");
+define('DHRUFUSION_URL', "");
+define("USERNAME", "");
+define("API_ACCESS_KEY", "");
 //error_log( $suwp_dhru_imei . '  BEING SUBMITTED, NOT YET PROCESSED.' );
 
-$servername = "how2zzcom.ipagemysql.com";
-$username = "SDyVRGrgqr72kR0";
-$password = "moURoyaMfXbvd4oi";
-$dbname = "ss_dbname_72n51cab1h";
+$servername = "";
+$username = "";
+$password = "";
+$dbname = "";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

@@ -102,15 +102,15 @@ function XMLtoARRAY($rawxml)
 
 #include ('dhrufusionapi.class.php');
 define("REQUESTFORMAT", "JSON"); // we recommend json format (More information http://php.net/manual/en/book.json.php)
-define('DHRUFUSION_URL', "https://www.unlockking.us/");
-define("USERNAME", "muhitmonsur");
-define("API_ACCESS_KEY", "N9-JXT-6NQ-IJ2-5KC-N9C-MBU-12Y");
+define('DHRUFUSION_URL', "");
+define("USERNAME", "");
+define("API_ACCESS_KEY", "");
 //error_log( $suwp_dhru_imei . '  BEING SUBMITTED, NOT YET PROCESSED.' );
 
-$servername = "how2zzcom.ipagemysql.com";
-$username = "SDyVRGrgqr72kR0";
-$password = "moURoyaMfXbvd4oi";
-$dbname = "ss_dbname_72n51cab1h";
+$servername = "";
+$username = "";
+$password = "";
+$dbname = "";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -178,7 +178,7 @@ if ($result->num_rows > 0) {
                                 print_r($request);
                                 $error = $request['ERROR'][0]['MESSAGE'];
                                 $apireq = $request['SUCCESS']['0']['MESSAGE'];
-
+								$multiple_status=1
                                 if ((!isset($apireq)) || ($apireq < 1) || (!isset($error)) || ($error < 1)) {
                                     #$order_id=$request['ID'];
                                     if ($error) {
@@ -196,8 +196,8 @@ if ($result->num_rows > 0) {
                                         $api_status = 0;
                                     }
 
-                                    mysqli_query($conn, "INSERT INTO wp_vhut_api_unlockking_response(order_id,reference_id,nonces,imei,api_status)
-                                        VALUES ('$order_id','$reference_id','$nonces','$my_Array','$api_status')");
+                                    mysqli_query($conn, "INSERT INTO wp_vhut_api_unlockking_response(order_id,reference_id,nonces,imei,api_status,multiple_status)
+                                        VALUES ('$order_id','$reference_id','$nonces','$my_Array','$api_status','$multiple_status')");
 
                                     // meta_key_update($order_id, $reference_id, $conn, $massages, $metavalue);
                                 } else {

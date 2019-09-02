@@ -12,9 +12,9 @@
 require ('header.php');
 include ('dhrufusionapi.class.php');
 define("REQUESTFORMAT", "JSON"); // we recommend json format (More information http://php.net/manual/en/book.json.php)
-define('DHRUFUSION_URL', "https://www.unlockking.us/");
-define("USERNAME", "muhitmonsur");
-define("API_ACCESS_KEY", "G1F-CWV-92C-YUP-CNF-23P-AKZ-8G7");
+define('DHRUFUSION_URL', "");
+define("USERNAME", "");
+define("API_ACCESS_KEY", "");
 
 $api = new DhruFusion();
 // Debug on
